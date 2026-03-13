@@ -1,1 +1,74 @@
-<p>quotation-list works!</p>
+<div class="p-6 max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Quotations</h1>
+    <a routerLink="/quotations/new"
+       class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition-colors">
+      <i class="fas fa-plus mr-1"></i>New Quote
+    </a>
+  </div>
+
+  <!-- Search & Filter -->
+  <div class="flex flex-col sm:flex-row gap-3 mb-5">
+    <input [(ngModel)]="search" (input)="applyFilter()"
+           placeholder="Search by client or quote number..."
+           class="border border-gray-200 rounded-lg px-4 py-2 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+    <div class="flex gap-2 flex-wrap">
+      <button *ngFor="let f of filters" (click)="setFilter(f)"
+              [ngClass]="activeFilter === f
+                ? 'bg-indigo-600 text-white'
+                : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'"
+              class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+        {{ f }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div *ngIf="filtered.length === 0" class="p-10 text-center text-gray-400">
+      <i class="fas fa-search text-3xl mb-2 block"></i>
+      No quotations found.
+    </div>
+    <table *ngIf="filtered.length > 0" class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+        <tr>
+          <th class="px-5 py-3 text-left">Quote #</th>
+          <th class="px-5 py-3 text-left">Client</th>
+          <th class="px-5 py-3 text-left">Email</th>
+          <th class="px-5 py-3 text-left">Amount</th>
+          <th class="px-5 py-3 text-left">Status</th>
+          <th class="px-5 py-3 text-left">Date</th>
+          <th class="px-5 py-3 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let q of filtered" class="border-t border-gray-100 hover:bg-gray-50 transition-colors">
+          <td class="px-5 py-3 font-medium text-indigo-600">
+            <a [routerLink]="['/quotations', q.id]">{{ q.quoteNumber }}</a>
+          </td>
+          <td class="px-5 py-3 text-gray-700">{{ q.clientName }}</td>
+          <td class="px-5 py-3 text-gray-400">{{ q.clientEmail }}</td>
+          <td class="px-5 py-3 font-medium text-gray-800">${{ q.totalAmount.toFixed(2) }}</td>
+          <td class="px-5 py-3">
+            <app-status-badge [status]="q.status"></app-status-badge>
+          </td>
+          <td class="px-5 py-3 text-gray-400">{{ q.createdDate | date:'mediumDate' }}</td>
+          <td class="px-5 py-3 flex gap-2">
+            <a [routerLink]="['/quotations', q.id]"
+               class="text-gray-400 hover:text-indigo-600 transition-colors" title="View">
+              <i class="fas fa-eye"></i>
+            </a>
+            <a [routerLink]="['/quotations/edit', q.id]"
+               class="text-gray-400 hover:text-amber-500 transition-colors" title="Edit">
+              <i class="fas fa-pen"></i>
+            </a>
+            <button (click)="delete(q.id)"
+                    class="text-gray-400 hover:text-red-500 transition-colors" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

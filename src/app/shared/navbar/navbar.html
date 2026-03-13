@@ -1,1 +1,21 @@
-<p>navbar works!</p>
+<nav class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+  <span class="text-xl font-bold text-indigo-600">
+    <i class="fas fa-file-invoice mr-2"></i>QuotePro
+  </span>
+
+  <div class="flex gap-6">
+    <a routerLink="/dashboard" routerLinkActive="text-indigo-600 font-semibold"
+       class="text-gray-500 hover:text-indigo-600 text-sm transition-colors">
+      <i class="fas fa-chart-bar mr-1"></i>Dashboard
+    </a>
+    <a routerLink="/quotations" routerLinkActive="text-indigo-600 font-semibold"
+       class="text-gray-500 hover:text-indigo-600 text-sm transition-colors">
+      <i class="fas fa-list mr-1"></i>Quotations
+    </a>
+  </div>
+
+  <a routerLink="/quotations/new"
+     class="bg-indigo-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+    <i class="fas fa-plus mr-1"></i>New Quote
+  </a>
+</nav>

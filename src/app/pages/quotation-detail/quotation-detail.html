@@ -1,1 +1,85 @@
-<p>quotation-detail works!</p>
+<div class="p-6 max-w-3xl mx-auto" *ngIf="quotation">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">{{ quotation.quoteNumber }}</h1>
+      <p class="text-sm text-gray-400 mt-1">{{ quotation.createdDate | date:'longDate' }}</p>
+    </div>
+    <div class="flex gap-2">
+      <button (click)="print()"
+              class="border border-gray-200 text-gray-500 px-4 py-2 rounded-lg text-sm hover:bg-gray-50">
+        <i class="fas fa-print mr-1"></i>Print
+      </button>
+      <a [routerLink]="['/quotations/edit', quotation.id]"
+         class="border border-amber-300 text-amber-600 px-4 py-2 rounded-lg text-sm hover:bg-amber-50">
+        <i class="fas fa-pen mr-1"></i>Edit
+      </a>
+      <button (click)="delete()"
+              class="border border-red-200 text-red-500 px-4 py-2 rounded-lg text-sm hover:bg-red-50">
+        <i class="fas fa-trash mr-1"></i>Delete
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
+    <!-- Client Info -->
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <p class="text-xs text-gray-400 uppercase mb-1">Client</p>
+        <p class="font-semibold text-gray-800">{{ quotation.clientName }}</p>
+        <p class="text-sm text-gray-500">{{ quotation.clientEmail }}</p>
+      </div>
+      <div class="text-right">
+        <p class="text-xs text-gray-400 uppercase mb-1">Status</p>
+        <app-status-badge [status]="quotation.status"></app-status-badge>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <div>
+      <p class="text-xs text-gray-400 uppercase mb-2">Items</p>
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+          <tr>
+            <th class="px-4 py-2 text-left">Description</th>
+            <th class="px-4 py-2 text-right">Qty</th>
+            <th class="px-4 py-2 text-right">Unit Price</th>
+            <th class="px-4 py-2 text-right">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of quotation.items" class="border-t border-gray-100">
+            <td class="px-4 py-2 text-gray-700">{{ item.description }}</td>
+            <td class="px-4 py-2 text-right text-gray-600">{{ item.quantity }}</td>
+            <td class="px-4 py-2 text-right text-gray-600">${{ item.unitPrice.toFixed(2) }}</td>
+            <td class="px-4 py-2 text-right font-medium">${{ (item.quantity * item.unitPrice).toFixed(2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Total -->
+    <div class="flex justify-end">
+      <div class="bg-indigo-50 rounded-lg px-6 py-3 text-right">
+        <p class="text-sm text-indigo-400">Total Amount</p>
+        <p class="text-2xl font-bold text-indigo-700">${{ quotation.totalAmount.toFixed(2) }}</p>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div *ngIf="quotation.notes">
+      <p class="text-xs text-gray-400 uppercase mb-1">Notes</p>
+      <p class="text-sm text-gray-600 bg-gray-50 rounded-lg p-3">{{ quotation.notes }}</p>
+    </div>
+  </div>
+
+  <a routerLink="/quotations" class="inline-block mt-4 text-sm text-indigo-600 hover:underline">
+    <i class="fas fa-arrow-left mr-1"></i>Back to list
+  </a>
+</div>
+
+<div *ngIf="!quotation" class="p-10 text-center text-gray-400">
+  <i class="fas fa-exclamation-circle text-3xl mb-2 block"></i>
+  Quotation not found.
+  <a routerLink="/quotations" class="text-indigo-600 ml-1 hover:underline">Go back</a>
+</div>
